@@ -79,7 +79,7 @@ class ImageGenerationWan26(
 
     name: str = "modelstudio_wanx26_image_generation"
     description: str = (
-        "[版本: wan2.6] 通义万相文生图模型（wanx2.6-t2i）。AI绘画服务，根据文本描述生成高质量图像，并返回图片URL。\n"
+        "[版本: wan2.6] 通义万相文生图模型（wan2.6-t2i）。AI绘画服务，根据文本描述生成高质量图像，并返回图片URL。\n"
         "新功能包括图像编辑和图文混合输出，满足更多样化的生成与集成需求。\n"
         "支持自定义分辨率：图像面积介于 768×768 至 1440×1440 像素之间，"
         "允许在该范围内自由调整宽高比（例如 768×2700）。\n"
@@ -140,18 +140,18 @@ class ImageGenerationWan26(
             )
         except Exception as e:
             raise RuntimeError(
-                f"Failed to call Wanx 2.6 image generation API: {str(e)}",
+                f"Failed to call Wan 2.6 image generation API: {str(e)}",
             ) from e
 
         if response.status_code != 200 or not response.output:
-            raise RuntimeError(f"Wanx 2.6 image generation failed: {response}")
+            raise RuntimeError(f"Wan 2.6 image generation failed: {response}")
 
         results = []
         try:
             if hasattr(response, "output") and response.output:
                 choices = getattr(response.output, "choices", [])
-                if choices:
-                    message = getattr(choices[0], "message", {})
+                for choice in choices:  # ← 遍历所有 choices，而不是只取 [0]
+                    message = getattr(choice, "message", {})
                     content = getattr(message, "content", [])
                     if isinstance(content, list):
                         for item in content:
@@ -163,7 +163,7 @@ class ImageGenerationWan26(
                         results.append(content["image"])
         except Exception as e:
             raise RuntimeError(
-                f"Failed to parse Wanx 2.6 API response: {str(e)}",
+                f"Failed to parse Wan 2.6 API response: {str(e)}",
             ) from e
 
         if not results:
