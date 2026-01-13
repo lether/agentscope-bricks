@@ -120,9 +120,9 @@ class ImageGenerationWan26(
         parameters = {}
         if args.negative_prompt:
             parameters["negative_prompt"] = args.negative_prompt
-        if args.size and args.size != "1024*1024":
+        if args.size:
             parameters["size"] = args.size
-        if args.n is not None and args.n != 1:
+        if args.n is not None:
             parameters["n"] = args.n
         if args.seed is not None:
             parameters["seed"] = args.seed
@@ -150,7 +150,7 @@ class ImageGenerationWan26(
         try:
             if hasattr(response, "output") and response.output:
                 choices = getattr(response.output, "choices", [])
-                for choice in choices:  # ← 遍历所有 choices，而不是只取 [0]
+                for choice in choices:
                     message = getattr(choice, "message", {})
                     content = getattr(message, "content", [])
                     if isinstance(content, list):

@@ -95,9 +95,7 @@ class ImageToVideoByFirstAndLastFrameWan22Submit(
     task using the wan2.2-kf2v-flash model.
     """
 
-    name: str = (
-        "modelstudio_image_to_video_by_first_and_last_frame_wan22_submit_task"
-    )
+    name: str = "modelstudio_image_to_video_fl_wan22_submit_task"
     description: str = (
         "[版本: wan2.2] 通义万相首尾帧生视频模型（wan2.2-kf2v-flash）异步任务提交工具。\n"
         "基于首帧与尾帧图像及文本提示，生成一段流畅的无声视频（当前不支持音频输出）。\n"
@@ -105,7 +103,7 @@ class ImageToVideoByFirstAndLastFrameWan22Submit(
 
     @trace(
         trace_type="AIGC",
-        trace_name="image_to_video_by_first_and_last_frame_wan22_submit",
+        trace_name="image_to_video_fl_wan22_submit_task",
     )
     async def arun(
         self,
@@ -226,9 +224,7 @@ class ImageToVideoByFirstAndLastFrameWan22Fetch(
         ImageToVideoByFirstAndLastFrameWan22FetchOutput,
     ],
 ):
-    name: str = (
-        "modelstudio_image_to_video_by_first_and_last_frame_wan22_fetch_result"
-    )
+    name: str = "modelstudio_image_to_video_fl_wan22_fetch_result"
     description: str = (
         "查询通义万相 wan2.2-kf2v-flash 首尾帧生视频任务的结果。\n"
         "输入 Task ID，返回生成的视频 URL 及任务状态。\n"
@@ -238,7 +234,7 @@ class ImageToVideoByFirstAndLastFrameWan22Fetch(
 
     @trace(
         trace_type="AIGC",
-        trace_name="image_to_video_by_first_and_last_frame_wan22_fetch",
+        trace_name="image_to_video_fl_wan22_fetch",
     )
     async def arun(
         self,

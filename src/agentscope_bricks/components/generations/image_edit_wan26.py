@@ -41,8 +41,8 @@ class ImageGenInput(BaseModel):
         description="是否添加水印,false：默认值，不添加水印,true：添加水印。",
     )
     n: Optional[int] = Field(
-        default=4,
-        description="生成图片的数量。取值范围为1~4张 默认4",
+        default=1,
+        description="生成图片的数量。取值范围为1~4张 默认1",
     )
     images: list[str] = Field(
         ...,
@@ -104,10 +104,8 @@ class ImageEditWan26(
             raise ValueError("Please set valid DASHSCOPE_API_KEY!")
 
         model_name = "wan2.6-image"
-
-        # 构造多模态 content：文本 + 可选图像
         content = [{"text": args.prompt}]
-        images = args.images or []  # 安全处理 None
+        images = args.images or []
         for img_url in images:
             content.append({"image": img_url})
 
@@ -120,7 +118,7 @@ class ImageEditWan26(
         parameters = {}
         if args.negative_prompt:
             parameters["negative_prompt"] = args.negative_prompt
-        if args.size and args.size != "1280*1280":
+        if args.size:
             parameters["size"] = args.size
         if args.seed is not None:
             parameters["seed"] = args.seed
@@ -128,7 +126,7 @@ class ImageEditWan26(
             parameters["watermark"] = args.watermark
         if args.prompt_extend is not None:
             parameters["prompt_extend"] = args.prompt_extend
-        if args.n is not None and args.n != 4:
+        if args.n is not None:
             parameters["n"] = args.n
         try:
             response = await AioMultiModalConversation.call(
@@ -156,7 +154,6 @@ class ImageEditWan26(
                         message = getattr(choice, "message", {})
                         msg_content = getattr(message, "content", [])
                         if isinstance(msg_content, list):
-                            # 遍历当前 choice 的 content
                             for item in msg_content:
                                 if isinstance(item, dict) and "image" in item:
                                     results.append(item["image"])
@@ -176,7 +173,6 @@ class ImageEditWan26(
                             and "image" in msg_content
                         ):
                             results.append(msg_content["image"])
-                    # --- 修改结束 ---
         except Exception as e:
             raise RuntimeError(
                 f"Failed to parse Wanx 2.6 API response: {str(e)}",
