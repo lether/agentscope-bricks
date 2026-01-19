@@ -135,7 +135,7 @@ class ImageStyleRepaint(
 
         image_url = args.image_url
         if args.image_url:
-            uploaded, image_url = check_and_upload_local(
+            uploaded, image_url, _ = check_and_upload_local(
                 model=model_name,
                 content=args.image_url,
                 api_key=api_key,
@@ -144,7 +144,7 @@ class ImageStyleRepaint(
 
         style_ref_url = args.style_ref_url
         if args.style_ref_url:
-            uploaded, style_ref_url = check_and_upload_local(
+            uploaded, style_ref_url, _ = check_and_upload_local(
                 model=model_name,
                 content=args.style_ref_url,
                 api_key=api_key,
